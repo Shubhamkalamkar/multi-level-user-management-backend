@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:4200', // Angular default port
+  origin: true, // Allow all origins for now (can be restricted to frontend URL in production)
   credentials: true
 }));
 
