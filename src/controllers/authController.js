@@ -45,17 +45,15 @@ exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    // For this MLM system, public registration is ONLY for creating the root Admin.
-    // Standard users must be created by their upline (existing users).
-    const adminExists = await User.findOne({ role: 'Admin' });
-    
-    if (adminExists) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'System is already initialized. Please contact an administrator or your upline to create your account.' 
-      });
+    // Check if username already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Username is already taken' });
     }
     
+    // Public registration is strictly for creating root Admins.
+    // Each Admin acts as the root of their own multi-level hierarchy tree.
+    // Standard users must be created by their upline via the dashboard.
     const role = 'Admin';
     
     const user = await User.create({ username, password, role });

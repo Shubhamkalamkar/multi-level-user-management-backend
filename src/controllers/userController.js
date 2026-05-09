@@ -6,6 +6,12 @@ exports.createNextLevelUser = async (req, res) => {
     const { username, password, commissionRate } = req.body;
     const parentId = req.user._id;
 
+    // Check if username already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Username is already taken' });
+    }
+
     // Ensure parent exists
     const parent = await User.findById(parentId);
     if (!parent) return res.status(404).json({ success: false, message: 'Parent not found' });
