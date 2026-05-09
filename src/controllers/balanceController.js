@@ -47,9 +47,10 @@ exports.transfer = async (req, res) => {
 
     if (!receiver) throw new Error('Receiver not found');
     
-    // Ensure receiver is a direct child (unless Admin overrides, but this route is for normal transfer)
-    if (receiver.parentId.toString() !== senderId.toString() && req.user.role !== 'Admin') {
-       throw new Error('You can only transfer to your direct downline');
+    // Ensure receiver is in the sender's downline (unless Admin overrides, but this route is for normal transfer)
+    const isDownline = receiver.ancestors.some(id => id.toString() === senderId.toString());
+    if (!isDownline && req.user.role !== 'Admin') {
+       throw new Error('You can only transfer to users in your own downline');
     }
 
     if (sender.balance < amount) {
