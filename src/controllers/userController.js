@@ -56,9 +56,10 @@ exports.changeNextLevelPassword = async (req, res) => {
     const targetUser = await User.findById(targetUserId);
     if (!targetUser) return res.status(404).json({ success: false, message: 'User not found' });
 
-    // Verify it's an immediate child
-    if (targetUser.parentId.toString() !== currentUserId.toString()) {
-      return res.status(403).json({ success: false, message: 'You can only change password for your immediate next-level users' });
+    // Verify target is in the user's downline (unless Admin overrides)
+    const isDownline = targetUser.ancestors.some(id => id.toString() === currentUserId.toString());
+    if (!isDownline && req.user.role !== 'Admin') {
+      return res.status(403).json({ success: false, message: 'You can only change passwords for users in your downline' });
     }
 
     targetUser.password = newPassword; // Pre-save hook will hash it
