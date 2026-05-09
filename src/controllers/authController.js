@@ -45,9 +45,18 @@ exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    // For this example, allow first user to be Admin if no Admin exists
+    // For this MLM system, public registration is ONLY for creating the root Admin.
+    // Standard users must be created by their upline (existing users).
     const adminExists = await User.findOne({ role: 'Admin' });
-    const role = adminExists ? 'User' : 'Admin';
+    
+    if (adminExists) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'System is already initialized. Please contact an administrator or your upline to create your account.' 
+      });
+    }
+    
+    const role = 'Admin';
     
     const user = await User.create({ username, password, role });
     sendTokenResponse(user, 201, res);
