@@ -57,7 +57,7 @@ exports.register = async (req, res) => {
     const role = 'Admin';
     
     const user = await User.create({ username, password, role });
-    sendTokenResponse(user, 201, res);
+    res.status(201).json({ success: true, message: 'Admin account created successfully. Please log in.' });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
