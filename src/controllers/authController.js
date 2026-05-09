@@ -45,9 +45,9 @@ exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    // For this example, allow first user to be Owner if no Owner exists
-    const ownerExists = await User.findOne({ role: 'Owner' });
-    const role = ownerExists ? 'User' : 'Owner';
+    // For this example, allow first user to be Admin if no Admin exists
+    const adminExists = await User.findOne({ role: 'Admin' });
+    const role = adminExists ? 'User' : 'Admin';
     
     const user = await User.create({ username, password, role });
     sendTokenResponse(user, 201, res);

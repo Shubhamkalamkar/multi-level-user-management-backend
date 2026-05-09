@@ -31,7 +31,7 @@ router.get('/', getBalance);
  * @swagger
  * /api/balance/recharge:
  *   post:
- *     summary: Self recharge balance (Owner only)
+ *     summary: Self recharge balance (Admin only)
  *     tags: [Balance]
  *     security:
  *       - cookieAuth: []

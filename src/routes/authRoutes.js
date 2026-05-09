@@ -27,7 +27,7 @@ router.get('/captcha', getCaptcha);
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Register the first owner or test users
+ *     summary: Register the first admin or test users
  *     tags: [Auth]
  *     requestBody:
  *       required: true

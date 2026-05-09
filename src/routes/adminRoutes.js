@@ -5,7 +5,7 @@ const { protect, authorize } = require('../middlewares/auth');
 const router = express.Router();
 
 router.use(protect);
-router.use(authorize('Admin', 'Owner'));
+router.use(authorize('Admin'));
 
 /**
  * @swagger

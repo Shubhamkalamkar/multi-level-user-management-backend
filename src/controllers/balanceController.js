@@ -18,8 +18,8 @@ exports.recharge = async (req, res) => {
     const { amount } = req.body;
     const userId = req.user._id;
 
-    if (req.user.role !== 'Owner') {
-      return res.status(403).json({ success: false, message: 'Only Owner can self-recharge' });
+    if (req.user.role !== 'Admin') {
+      return res.status(403).json({ success: false, message: 'Only Admin can self-recharge' });
     }
 
     const user = await User.findById(userId);
@@ -48,7 +48,7 @@ exports.transfer = async (req, res) => {
     if (!receiver) throw new Error('Receiver not found');
     
     // Ensure receiver is a direct child (unless Admin overrides, but this route is for normal transfer)
-    if (receiver.parentId.toString() !== senderId.toString() && req.user.role !== 'Admin' && req.user.role !== 'Owner') {
+    if (receiver.parentId.toString() !== senderId.toString() && req.user.role !== 'Admin') {
        throw new Error('You can only transfer to your direct downline');
     }
 
