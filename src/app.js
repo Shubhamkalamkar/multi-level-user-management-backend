@@ -11,6 +11,9 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
+// Trust the reverse proxy (Render, Heroku, etc.) so secure cookies can be set
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
