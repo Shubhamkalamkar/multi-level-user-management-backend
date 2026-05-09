@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - '5000:5000'
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/multi-level-user-management
+      - JWT_SECRET=your_super_secret_jwt_key
+      - JWT_REFRESH_SECRET=your_super_secret_refresh_key
+      - JWT_EXPIRE=1h
+      - JWT_REFRESH_EXPIRE=7d
+      - COOKIE_EXPIRE=1
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+    volumes:
+      - ./src:/usr/src/app/src
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    # To enable transactions we need a replica set. For simple dev we can configure a single node replica set.
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+
+volumes:
+  mongo_data:
