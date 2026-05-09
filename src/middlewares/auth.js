@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
+  console.log('Protect Middleware Hit:', req.path);
+  console.log('Cookies received:', req.cookies);
+  console.log('Origin header:', req.headers.origin);
+
   let token;
 
   if (req.cookies && req.cookies.token) {
@@ -9,6 +13,7 @@ const protect = async (req, res, next) => {
   }
 
   if (!token) {
+    console.log('Token missing, returning 401');
     return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
   }
 
