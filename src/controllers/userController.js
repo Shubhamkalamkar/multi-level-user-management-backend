@@ -56,7 +56,7 @@ exports.changeNextLevelPassword = async (req, res) => {
     const targetUser = await User.findById(targetUserId);
     if (!targetUser) return res.status(404).json({ success: false, message: 'User not found' });
 
-    // Verify target is in the user's downline (unless Admin overrides)
+    // Verify target is in the user's downline
     const isDownline = targetUser.ancestors.some(id => id.toString() === currentUserId.toString());
     if (!isDownline && req.user.role !== 'Admin') {
       return res.status(403).json({ success: false, message: 'You can only change passwords for users in your downline' });

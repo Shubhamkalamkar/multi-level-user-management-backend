@@ -51,9 +51,6 @@ exports.register = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Username is already taken' });
     }
     
-    // Public registration is strictly for creating root Admins.
-    // Each Admin acts as the root of their own multi-level hierarchy tree.
-    // Standard users must be created by their upline via the dashboard.
     const role = 'Admin';
     
     const user = await User.create({ username, password, role });
